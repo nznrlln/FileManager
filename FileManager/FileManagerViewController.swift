@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Photos
+import PhotosUI
 
 class FileManagerViewController: UIViewController {
 
@@ -108,6 +110,7 @@ class FileManagerViewController: UIViewController {
 
     @objc private func addPictureButtonTap() {
         debugPrint("addPictureButtonTap")
+        showImagePicker()
     }
 }
 
@@ -160,4 +163,41 @@ extension FileManagerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
+}
+
+
+//extension FileManagerViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+//    func showImagePicker() {
+////        let imagePicker = UIImagePickerController()
+////        imagePicker.delegate = self
+////        present(imagePicker, animated: true)
+//    }
+//}
+    
+extension FileManagerViewController: PHPickerViewControllerDelegate {
+    func showImagePicker() {
+        var pickerConfiguration = PHPickerConfiguration(photoLibrary: .shared())
+        pickerConfiguration.selectionLimit = 1
+        let picker = PHPickerViewController(configuration: pickerConfiguration)
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        results.forEach { [weak self] result in
+            result.itemProvider.loadFileRepresentation(forTypeIdentifier: "public.image") { url, error in
+                if error == nil {
+                    if let destinationURL = self?.currentDirectoryURL.appendingPathComponent("\(Date())") {
+                        try? FileManager.default.replaceItemAt(destinationURL, withItemAt: url!)
+                        DispatchQueue.main.async {
+                            self?.tableView.reloadData()
+                        }
+                    }
+                }
+            }
+
+        }
+        picker.dismiss(animated: true, completion: .none)
+    }
+
+
 }
