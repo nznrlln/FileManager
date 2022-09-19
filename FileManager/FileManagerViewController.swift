@@ -9,6 +9,11 @@ import UIKit
 
 class FileManagerViewController: UIViewController {
 
+    private var currentDirectoryURL: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    private var currentDirectoryFilesURL: [URL] {
+        return (try? FileManager.default.contentsOfDirectory(at: currentDirectoryURL, includingPropertiesForKeys: nil)) ?? []
+    }
+
     private lazy var addNoteButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
             image: UIImage(systemName: "note.text.badge.plus"),
@@ -62,6 +67,7 @@ class FileManagerViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         viewInitialSettings()
+        print(currentDirectoryFilesURL)
     }
 
     private func viewInitialSettings() {
@@ -108,10 +114,23 @@ class FileManagerViewController: UIViewController {
 // MARK: - UITableViewDataSource
 extension FileManagerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        10
+        currentDirectoryFilesURL.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.identifier, for: indexPath)
+        var content = cell.defaultContentConfiguration()
+
+        let itemURL = currentDirectoryFilesURL[indexPath.row]
+        content.text = itemURL.deletingPathExtension().lastPathComponent
+
+        var isFolder: ObjCBool = false
+        try? FileManager.default.fileExists(atPath: itemURL.path, isDirectory: &isFolder)
+        if isFolder.boolValue {
+            content.secondaryText = "Folder"
+        } else {
+            content.secondaryText = "File"
+        }
+        cell.contentConfiguration = content
 
         return cell
     }
