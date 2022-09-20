@@ -6,12 +6,11 @@
 //
 
 import UIKit
-import Photos
 import PhotosUI
 
 class FileManagerViewController: UIViewController {
 
-    private var currentDirectoryURL: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    var currentDirectoryURL: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     private var currentDirectoryFilesURL: [URL] {
         return (try? FileManager.default.contentsOfDirectory(at: currentDirectoryURL, includingPropertiesForKeys: nil)) ?? []
     }
@@ -69,7 +68,7 @@ class FileManagerViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         viewInitialSettings()
-        print(currentDirectoryFilesURL)
+//        print(currentDirectoryFilesURL)
     }
 
     private func viewInitialSettings() {
@@ -100,12 +99,145 @@ class FileManagerViewController: UIViewController {
         ])
     }
 
+    enum alertMode {
+        case createNote
+        case createFolder
+        case createImage
+        case showNote
+        case showImage
+    }
+
+    private func showAlert(mode: alertMode, content: String?, image: UIImage?, url: URL?) {
+        switch mode {
+        case .createNote:
+            let alertController = UIAlertController(title: "Create Note", message: nil, preferredStyle: .alert)
+            alertController.addTextField { textField in
+                textField.placeholder = "Note name"
+            }
+            alertController.addTextField { textField in
+                textField.placeholder = "Note content"
+            }
+
+            let createAction = UIAlertAction(title: "Create", style: .default) { [weak self] action in
+                if let noteName = alertController.textFields![0].text,
+                   let noteContent = alertController.textFields![1].text,
+                   noteName != "",
+                   noteContent != "" {
+                    let newURL = self?.currentDirectoryURL.appendingPathComponent(noteName + ".txt")
+                    let newPath = newURL?.path
+                    do {
+                        try NSString(string: noteContent).write(toFile: newPath!, atomically: true, encoding: String.Encoding.utf8.rawValue)
+                    } catch {
+                        debugPrint(error.localizedDescription)
+                    }
+                    self?.tableView.reloadData()
+                }
+            }
+
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+
+            alertController.addAction(createAction)
+            alertController.addAction(cancelAction)
+
+            present(alertController, animated: true)
+
+        case .createImage:
+            let alertController = UIAlertController(title: "Create Image", message: nil, preferredStyle: .alert)
+            alertController.addTextField { textField in
+                textField.placeholder = "Image name"
+            }
+
+            let createAction = UIAlertAction(title: "Create", style: .default) { [weak self] action in
+                if let imageName = alertController.textFields![0].text, imageName != "" {
+                    do {
+                        // Логика: сначала в PHPicker создается картинка, а уже здесь я ее меняю на такое же, но с нормальным именем. Иначе картинка успевает выгрузиться из памяти до того, как придет название из UIAlert
+                        if let destinationURL = self?.currentDirectoryURL.appendingPathComponent(imageName + ".jpeg") {
+                            try FileManager.default.replaceItemAt(destinationURL, withItemAt: url!)
+                            try FileManager.default.removeItem(at: url!)
+                        }
+                    } catch {
+                        debugPrint(error.localizedDescription)
+                    }
+                    self?.tableView.reloadData()
+                }
+            }
+
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { [weak self] action in
+                do {
+                    try FileManager.default.removeItem(at: url!)
+                } catch {
+                    debugPrint(error.localizedDescription)
+                }
+                self?.tableView.reloadData()
+            }
+
+
+
+            alertController.addAction(createAction)
+            alertController.addAction(cancelAction)
+
+            present(alertController, animated: true)
+
+        case .createFolder:
+            let alertController = UIAlertController(title: "Create Folder", message: nil, preferredStyle: .alert)
+            alertController.addTextField { textField in
+                textField.placeholder = "Folder name"
+            }
+
+            let createAction = UIAlertAction(title: "Create", style: .default) { [weak self] action in
+                if let folderName = alertController.textFields![0].text, folderName != "" {
+                    let newDirectoryURL = self?.currentDirectoryURL.appendingPathComponent(folderName)
+                    do {
+                        try FileManager.default.createDirectory(at: newDirectoryURL!, withIntermediateDirectories: false)
+                    } catch {
+                        debugPrint(error.localizedDescription)
+                    }
+                    self?.tableView.reloadData()
+                }
+            }
+
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+
+            alertController.addAction(createAction)
+            alertController.addAction(cancelAction)
+
+            present(alertController, animated: true)
+
+        case .showNote:
+            let alertController = UIAlertController(title: "Note content", message: content, preferredStyle: .alert)
+            let closeAction = UIAlertAction(title: "Close", style: .default)
+            alertController.addAction(closeAction)
+
+            present(alertController, animated: true)
+
+        case .showImage:
+            let alertController = UIAlertController(title: "Image", message: nil, preferredStyle: .alert)
+
+            let imageAction = UIAlertAction(title: "", style: .default)
+            imageAction.isEnabled = false
+
+            // отступ подобрал на шару
+            let left = (alertController.view.bounds.width - image!.size.width) / 6
+            imageAction.setValue(image?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: -left, bottom: 0, right: 0)).withRenderingMode(.alwaysOriginal), forKey: "image")
+            
+
+            let closeAction = UIAlertAction(title: "Close", style: .default)
+
+            alertController.addAction(imageAction)
+            alertController.addAction(closeAction)
+
+            present(alertController, animated: true)
+        }
+    }
+
     @objc private func addNoteButtonTap() {
         debugPrint("addNoteButtonTap")
+        showAlert(mode: .createNote, content: nil, image: nil, url: nil)
     }
 
     @objc private func addFolderButtonTap() {
         debugPrint("addFolderButtonTap")
+        showAlert(mode: .createFolder, content: nil, image: nil, url: nil)
     }
 
     @objc private func addPictureButtonTap() {
@@ -131,14 +263,12 @@ extension FileManagerViewController: UITableViewDataSource {
         if isFolder.boolValue {
             content.secondaryText = "Folder"
         } else {
-            content.secondaryText = "File"
+            content.secondaryText = "File extension: \(itemURL.pathExtension)"
         }
         cell.contentConfiguration = content
 
         return cell
     }
-
-
 
 }
 
@@ -162,6 +292,26 @@ extension FileManagerViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+
+        let itemURL = currentDirectoryFilesURL[indexPath.row]
+        var isFolder: ObjCBool = false
+        _ = try? FileManager.default.fileExists(atPath: itemURL.path, isDirectory: &isFolder)
+        if isFolder.boolValue {
+            let newDirectoryVC = FileManagerViewController()
+            newDirectoryVC.currentDirectoryURL = itemURL
+            navigationController?.pushViewController(newDirectoryVC, animated: true)
+
+        } else if itemURL.pathExtension == "txt" {
+            do {
+                let text = try NSString(contentsOfFile: itemURL.path, encoding: String.Encoding.utf8.rawValue)
+                showAlert(mode: .showNote, content: text as String, image: nil, url: nil)
+            } catch {
+                debugPrint(error.localizedDescription)
+            }
+        } else {
+            let image = UIImage(contentsOfFile: itemURL.path)?.resized(toWidth: UIScreen.main.bounds.width / 2)
+            showAlert(mode: .showImage, content: nil, image: image, url: nil)
+        }
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -178,15 +328,7 @@ extension FileManagerViewController: UITableViewDelegate {
     
 }
 
-
-//extension FileManagerViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-//    func showImagePicker() {
-////        let imagePicker = UIImagePickerController()
-////        imagePicker.delegate = self
-////        present(imagePicker, animated: true)
-//    }
-//}
-    
+// MARK: - PHPickerViewControllerDelegate
 extension FileManagerViewController: PHPickerViewControllerDelegate {
     func showImagePicker() {
         var pickerConfiguration = PHPickerConfiguration(photoLibrary: .shared())
@@ -199,17 +341,18 @@ extension FileManagerViewController: PHPickerViewControllerDelegate {
         results.forEach { [weak self] result in
             result.itemProvider.loadFileRepresentation(forTypeIdentifier: "public.image") { url, error in
                 if error == nil {
-                    if let destinationURL = self?.currentDirectoryURL.appendingPathComponent("\(Date())") {
+                    if let destinationURL = self?.currentDirectoryURL.appendingPathComponent("\(Date()).jpeg") {
                         _ = try? FileManager.default.replaceItemAt(destinationURL, withItemAt: url!)
                         DispatchQueue.main.async {
-                            self?.tableView.reloadData()
+                            self?.showAlert(mode: .createImage, content: nil, image: nil, url: destinationURL)
                         }
                     }
+                } else {
+                    
                 }
             }
         }
         picker.dismiss(animated: true, completion: .none)
     }
-
 
 }

@@ -15,6 +15,7 @@
 		FD4D4A3328D73B45001CE5CE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD4D4A3128D73B45001CE5CE /* LaunchScreen.storyboard */; };
 		FD4D4A3B28D73C36001CE5CE /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4D4A3A28D73C36001CE5CE /* UIView+Extension.swift */; };
 		FDAA340528D7817600B9AF64 /* FileManagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAA340428D7817600B9AF64 /* FileManagerViewController.swift */; };
+		FDAA340728DA4B5700B9AF64 /* UIImage+Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAA340628DA4B5700B9AF64 /* UIImage+Extention.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		FD4D4A3428D73B45001CE5CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD4D4A3A28D73C36001CE5CE /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		FDAA340428D7817600B9AF64 /* FileManagerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerViewController.swift; sourceTree = "<group>"; };
+		FDAA340628DA4B5700B9AF64 /* UIImage+Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extention.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 				FD4D4A3428D73B45001CE5CE /* Info.plist */,
 				FD4D4A3A28D73C36001CE5CE /* UIView+Extension.swift */,
 				FDAA340428D7817600B9AF64 /* FileManagerViewController.swift */,
+				FDAA340628DA4B5700B9AF64 /* UIImage+Extention.swift */,
 			);
 			path = FileManager;
 			sourceTree = "<group>";
@@ -144,6 +147,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDAA340728DA4B5700B9AF64 /* UIImage+Extention.swift in Sources */,
 				FDAA340528D7817600B9AF64 /* FileManagerViewController.swift in Sources */,
 				FD4D4A2B28D73B45001CE5CE /* ViewController.swift in Sources */,
 				FD4D4A2728D73B45001CE5CE /* AppDelegate.swift in Sources */,
