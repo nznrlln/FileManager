@@ -348,7 +348,16 @@ extension FileManagerViewController: PHPickerViewControllerDelegate {
                         }
                     }
                 } else {
-                    
+                    result.itemProvider.loadFileRepresentation(forTypeIdentifier: "public.heic") { url, error in
+                        if error == nil {
+                            if let destinationURL = self?.currentDirectoryURL.appendingPathComponent("\(Date()).jpeg") {
+                                _ = try? FileManager.default.replaceItemAt(destinationURL, withItemAt: url!)
+                                DispatchQueue.main.async {
+                                    self?.showAlert(mode: .createImage, content: nil, image: nil, url: destinationURL)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
