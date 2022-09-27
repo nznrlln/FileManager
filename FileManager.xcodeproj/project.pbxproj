@@ -16,6 +16,12 @@
 		FD4D4A3B28D73C36001CE5CE /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4D4A3A28D73C36001CE5CE /* UIView+Extension.swift */; };
 		FDAA340528D7817600B9AF64 /* FileManagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAA340428D7817600B9AF64 /* FileManagerViewController.swift */; };
 		FDAA340728DA4B5700B9AF64 /* UIImage+Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAA340628DA4B5700B9AF64 /* UIImage+Extention.swift */; };
+		FDAA340928DCD12100B9AF64 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAA340828DCD12100B9AF64 /* LogInViewController.swift */; };
+		FDAA340B28DCF08C00B9AF64 /* KeyChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAA340A28DCF08C00B9AF64 /* KeyChain.swift */; };
+		FDAA340D28DF834100B9AF64 /* AppErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAA340C28DF834100B9AF64 /* AppErrors.swift */; };
+		FDAA340F28E0726C00B9AF64 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAA340E28E0726C00B9AF64 /* MainTabBarViewController.swift */; };
+		FDAA341128E0727B00B9AF64 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAA341028E0727B00B9AF64 /* SettingsViewController.swift */; };
+		FDAA341328E3648500B9AF64 /* UserDefaultSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAA341228E3648500B9AF64 /* UserDefaultSettings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +36,12 @@
 		FD4D4A3A28D73C36001CE5CE /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		FDAA340428D7817600B9AF64 /* FileManagerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerViewController.swift; sourceTree = "<group>"; };
 		FDAA340628DA4B5700B9AF64 /* UIImage+Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extention.swift"; sourceTree = "<group>"; };
+		FDAA340828DCD12100B9AF64 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
+		FDAA340A28DCF08C00B9AF64 /* KeyChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChain.swift; sourceTree = "<group>"; };
+		FDAA340C28DF834100B9AF64 /* AppErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppErrors.swift; sourceTree = "<group>"; };
+		FDAA340E28E0726C00B9AF64 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
+		FDAA341028E0727B00B9AF64 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		FDAA341228E3648500B9AF64 /* UserDefaultSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultSettings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +84,12 @@
 				FD4D4A3A28D73C36001CE5CE /* UIView+Extension.swift */,
 				FDAA340428D7817600B9AF64 /* FileManagerViewController.swift */,
 				FDAA340628DA4B5700B9AF64 /* UIImage+Extention.swift */,
+				FDAA340828DCD12100B9AF64 /* LogInViewController.swift */,
+				FDAA340A28DCF08C00B9AF64 /* KeyChain.swift */,
+				FDAA340C28DF834100B9AF64 /* AppErrors.swift */,
+				FDAA340E28E0726C00B9AF64 /* MainTabBarViewController.swift */,
+				FDAA341028E0727B00B9AF64 /* SettingsViewController.swift */,
+				FDAA341228E3648500B9AF64 /* UserDefaultSettings.swift */,
 			);
 			path = FileManager;
 			sourceTree = "<group>";
@@ -149,8 +167,14 @@
 			files = (
 				FDAA340728DA4B5700B9AF64 /* UIImage+Extention.swift in Sources */,
 				FDAA340528D7817600B9AF64 /* FileManagerViewController.swift in Sources */,
+				FDAA341128E0727B00B9AF64 /* SettingsViewController.swift in Sources */,
 				FD4D4A2B28D73B45001CE5CE /* ViewController.swift in Sources */,
+				FDAA340D28DF834100B9AF64 /* AppErrors.swift in Sources */,
+				FDAA340928DCD12100B9AF64 /* LogInViewController.swift in Sources */,
+				FDAA340F28E0726C00B9AF64 /* MainTabBarViewController.swift in Sources */,
 				FD4D4A2728D73B45001CE5CE /* AppDelegate.swift in Sources */,
+				FDAA341328E3648500B9AF64 /* UserDefaultSettings.swift in Sources */,
+				FDAA340B28DCF08C00B9AF64 /* KeyChain.swift in Sources */,
 				FD4D4A3B28D73C36001CE5CE /* UIView+Extension.swift in Sources */,
 				FD4D4A2928D73B45001CE5CE /* SceneDelegate.swift in Sources */,
 			);

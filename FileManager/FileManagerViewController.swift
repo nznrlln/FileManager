@@ -10,9 +10,24 @@ import PhotosUI
 
 class FileManagerViewController: UIViewController {
 
-    var currentDirectoryURL: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    private var currentDirectoryURL: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+
     private var currentDirectoryFilesURL: [URL] {
-        return (try? FileManager.default.contentsOfDirectory(at: currentDirectoryURL, includingPropertiesForKeys: nil)) ?? []
+        guard let array = try? FileManager.default.contentsOfDirectory(at: currentDirectoryURL, includingPropertiesForKeys: nil) else {return []}
+
+        switch UserDefaultSettings.sorting {
+        case .alphabet:
+            let sortedArray = array.sorted { url1, url2 in
+                return url1.lastPathComponent < url2.lastPathComponent
+            }
+            return sortedArray
+
+        case .reverseAlphabed: let sortedArray = array.sorted { url1, url2 in
+            return url1.lastPathComponent > url2.lastPathComponent
+        }
+        return sortedArray
+        }
+
     }
 
     private lazy var addNoteButton: UIBarButtonItem = {
@@ -68,7 +83,13 @@ class FileManagerViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         viewInitialSettings()
-//        print(currentDirectoryFilesURL)
+//        debugPrint(currentDirectoryURL)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        tableView.reloadData()
     }
 
     private func viewInitialSettings() {

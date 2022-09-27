@@ -19,10 +19,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
 
-        let vc = FileManagerViewController()
-        let nc = UINavigationController(rootViewController: vc)
+//        let vc = FileManagerViewController()
+        let vc = LogInViewController()
+//        UserDefaultSettings.passwordState = .existNot
 
+        let nc = UINavigationController(rootViewController: vc)
         window.rootViewController = nc
+        
         window.makeKeyAndVisible()
         self.window = window
     }
